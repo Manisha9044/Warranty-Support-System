@@ -1,0 +1,17 @@
+#node_modules
+*.env 
+.env* 
+*.local
+*.pdf
+
+
+#folders
+migrations/
+media/
+__pycache__/
+venv/
+env/
+env
+
+#files
+db.sqlite3 
