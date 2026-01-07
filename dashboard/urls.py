@@ -15,5 +15,12 @@ urlpatterns = [
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('customer-list/',CustomerList.as_view(),name='customer_list'),
+    path('add-customer/',AddCustomer.as_view(),name='add_customer'),
+    path('edit-customer/<int:id>',EditCustomer.as_view(),name='edit_customer'),
+    path('delete-customer/<int:id>/',DeleteCustomer.as_view(),name='delete_customer'),
+    path('customer-active-inactive/<int:id>/', CustomerActiveinactive.as_view(), name='customer-active-inactive'),
+
+
 
 ]

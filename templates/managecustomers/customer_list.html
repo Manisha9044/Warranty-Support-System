@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper">
+    <div class="page-wrapper">
+        <div class="page-content">
+
+            
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-uppercase">Customer List</h6>
+                <a href="{% url 'add_customer' %}" class="btn btn-primary">
+                    + Add Customer
+                </a>
+            </div>
+
+            <hr/>
+{% comment %} <td>
+My strengths are problem-solving, quick learning, and responsibility.
+ I take ownership of tasks and ensure timely delivery.
+  I also adapt easily to new technologies.”
+</td> {% endcomment %}
+
+{% comment %} 
+<td>
+🔹 2. What are your key skills?
+
+Answer:
+
+“My key skills include Python, Django, Django REST Framework, MySQL/PostgreSQL, API integration, Git, and basic frontend understanding. I also have experience in debugging and optimizing existing code.”
+
+🔹 3. What are your strengths?
+
+Answer:
+
+“My strengths are problem-solving, quick learning, and responsibility. I take ownership of tasks and ensure timely delivery. I also adapt easily to new technologies.”
+
+🔹 4. What is your weakness?
+
+Answer:
+
+“Earlier, I used to spend extra time perfecting my code. Now I balance quality with deadlines by prioritizing tasks and following best practices.”
+
+🔹 5. Describe your current/previous role
+
+Answer:
+
+“In my previous role, I worked as a Python developer where I handled backend logic, created APIs, worked with databases, fixed bugs, and collaborated with frontend and QA teams.”
+
+🔹 6. Why do you want to change your job?
+
+Answer:
+
+“I am grateful for my current experience, but I am looking for more challenging projects, better learning opportunities, and professional growth.”
+
+🔹 7. Why do you want to work in our company?
+
+Answer:
+
+“Your company works on scalable and meaningful products. I feel my Python and backend experience aligns well with your requirements, and I see good growth and learning opportunities here.”
+
+🔹 8. Why should we hire you?
+
+Answer:
+
+“I have hands-on experience in Python development, strong problem-solving skills, and a positive attitude. I can quickly adapt to your workflow and contribute from day one.”
+
+🔹 9. How do you handle pressure or deadlines?
+
+Answer:
+
+“I handle pressure by breaking tasks into smaller steps, prioritizing work, and communicating clearly with the team if any issues arise.”
+
+🔹 10. Have you faced any challenge at work?
+
+Answer:
+
+“Yes, once we faced an issue with API performance. I analyzed the problem, optimized queries, and improved response time, which helped the project significantly.”
+
+🔹 11. Are you comfortable working in a team?
+
+Answer:
+
+“Yes, I enjoy working in a team. Collaboration helps in learning and delivering better solutions.”
+
+🔹 12. How do you upgrade your skills?
+
+Answer:
+
+“I regularly practice coding, read documentation, follow tech blogs, and work on small projects to improve my skills.”
+
+🔹 13. Expected salary?
+
+Answer:
+
+“Based on my 2 years of experience and market standards, I am expecting ₹5.5 to ₹7 LPA, but I am open to discussion.”
+
+🔹 14. When can you join?
+
+Answer (If serving notice):
+
+“I have a notice period of ___ days, but I can join as per company requirements.”
+
+Answer (Immediate):
+
+“I can join immediately.”
+
+🔹 15. Do you have any questions for us?
+
+Always say YES ✔️
+
+Ask this:
+
+“Can you please tell me about the team structure and growth opportunities for this role?”</td> {% endcomment %}
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Sr.No.</th>
+                                <th>Profile Pic</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+
+                                <td>
+                                    {% if customer.profile_pic %}
+                                        <img src="{{ customer.profile_pic.url }}"
+                                             width="40" height="40"
+                                             class="rounded-circle">
+                                    {% else %}
+                                        <span class="text-muted">No Image</span>
+                                    {% endif %}
+                                </td>
+
+                                
+
+                                <td>{{ customer.first_name }}</td>
+                                <td>{{ customer.last_name }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.phone_number }}</td>
+
+                                <td>
+                                <form method="post" action="#">
+                                    {% csrf_token %}
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input"
+                                            type="checkbox"
+                                            onchange="this.form.submit()"
+                                            {% if customer.is_active %}checked{% endif %}>
+                                    </div>
+                                </form>
+                            </td>
+
+                              <td>
+                                <a href="{% url 'edit_customer' customer.id %}" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square fa-lg"></i>
+                                </a>
+                            |
+                                <a href="{% url 'delete_customer' customer.id %}" title="Delete" class="text-danger"
+                                onclick="return confirm('Are you sure?')">
+                                    <i class="fa-solid fa-trash fa-lg"></i>
+                                </a>
+                            </td>
+
+                            </tr>
+                           
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

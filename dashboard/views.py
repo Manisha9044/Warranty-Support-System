@@ -1,9 +1,7 @@
 from django.shortcuts import render
-
 from .models import *
 from django.contrib import messages
 from django.views import View
-# Create your views here.
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views import View
@@ -12,7 +10,7 @@ from dashboard.admin import*
 from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib.auth import update_session_auth_hash
-from django.db.models import Count, Sum 
+
 
 
 class Adminloginview(View):
@@ -117,5 +115,77 @@ class Admin_changepassord(View):
         return redirect('admin_updateprofile')
     
 
+class CustomerList(View):
+    def get(self,request):
+        customers = Custom_User.objects.filter(is_superuser=False)
+        return render(request,'managecustomers/customer_list.html',{'customers':customers})    
+    
+class AddCustomer(View):
+    def get(self, request):
+        return render(request, 'managecustomers/addcustomer.html')
 
+    def post(self, request):
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        profile_pic = request.FILES.get('profile_pic')
 
+        user = Custom_User.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            phone_number=phone_number,
+            user_type='Customer',
+            is_customer=True,
+            is_active=True
+        )
+
+        if profile_pic:
+            user.profile_pic = profile_pic
+            user.save()
+
+        messages.success(request, 'Customer created successfully')
+        return redirect('customer_list')
+class CustomerActiveinactive(View):
+    def post(self, request, id):
+        customer = Custom_User.objects.get(id=id, user_type='Customer')
+        customer.is_active = not customer.is_active
+        customer.save()
+        return JsonResponse({
+            "success": True,
+            "is_active": customer.is_active
+        })
+
+class EditCustomer(View):
+    def get(self, request,id):
+        user = Custom_User.objects.get(id=id)
+        return render(request, 'managecustomers/editcustomer.html',{'user':user})
+
+    def post(self, request,id):
+        user = Custom_User.objects.get(id=id)
+        First_Name = request.POST.get('First_Name')
+        Last_Name = request.POST.get('Last_Name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        profile_pic = request.FILES.get('profile_pic')
+        user.First_Name=First_Name
+        user.Last_Name=Last_Name
+        user.email=email
+        user.phone_number=phone_number
+        user.profile_pic = profile_pic
+        user.user_type = 'Customer'
+        user.is_customer = True
+        user.is_active = True
+        user.save()
+
+        messages.success(request, 'Customer Updated successfully')
+        return redirect('customer_list')
+ 
+class DeleteCustomer(View):
+    def get(self, request,id):
+        user = Custom_User.objects.get(id=id)
+        user.delete()
+        messages.success(request, 'Customer Deleted successfully')
+        return redirect('customer_list')
+    
